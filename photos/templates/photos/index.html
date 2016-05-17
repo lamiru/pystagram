@@ -1,0 +1,11 @@
+<table>
+{% for post in post_list %}
+<tr>
+    <td>
+        <a href="/photos/{{ post.pk }}/">
+            {{ post.title }}
+        </a>
+    </td>
+</tr>
+{% endfor %}
+</table>
