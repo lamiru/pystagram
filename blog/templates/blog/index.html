@@ -33,6 +33,7 @@
                             <h5>{{ post.title }}</h5>
                         </div>
                     </a>
+                    <a href="{% url "blog.views.detail" post.uuid.hex %}">by uuid</a>
                 </div>
             </div>
         {% endfor %}

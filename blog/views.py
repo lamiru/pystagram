@@ -1,4 +1,4 @@
-from django.conf import settings
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from blog.models import Post
 
@@ -19,8 +19,13 @@ def index(request):
         'lorempixel_categories': lorempixel_categories,
     })
 
-def detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+def detail(request, pk=None, uuid=None):
+    if pk:
+        post = get_object_or_404(Post, pk=pk)
+    elif uuid:
+        post = get_object_or_404(Post, uuid=uuid)
+    else:
+        raise Http404
 
     return render(request, 'blog/detail.html', {
         'post': post,
