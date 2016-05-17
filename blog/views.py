@@ -8,9 +8,15 @@ def index(request):
 
     post_list = Post.objects.all()
 
+    lorempixel_categories = (
+        'abstract', 'animals', 'business', 'cats', 'city', 'food', 'night',
+        'life', 'fashion', 'people', 'nature', 'sports', 'technics', 'transport',
+    )
+
     return render(request, 'blog/index.html', {
         'count': count,
         'post_list': post_list,
+        'lorempixel_categories': lorempixel_categories,
     })
 
 def detail(request, pk):

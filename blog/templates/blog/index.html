@@ -1,17 +1,41 @@
 {% extends "blog/layout.html" %}
 
+{% block extra_head %}
+<!-- http://tobyyun.tumblr.com/post/55858430437/css%EB%A5%BC-%ED%86%B5%ED%95%9C-%EB%A9%80%ED%8B%B0%EB%9D%BC%EC%9D%B8-%EB%A7%90%EC%A4%84%EC%9E%84-%EC%B2%98%EB%A6%AC%EC%99%80-%ED%8F%B4%EB%B0%B1 -->
+<style>
+.thumbnail .caption h5 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-wrap: break-wrap;
+}
+.thumbnail .caption {
+    height: 50px;
+}
+</style>
+{% endblock %}
+
+{% block navbar_left %}
+    <li><a><span class="label label-info">{{ count }}</span></a></li>
+{% endblock %}
+
 {% block content %}
-    {{ block.super }}
-    {{ count }}
-
-    <ul>
-    {% for post in post_list %}
-        <li>
-            <a href="{% url "blog.views.detail" post.pk %}">
-                {{ post.title }}
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
-
+<div class="container">
+    <div class="row">
+        {% for post in post_list %}
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                <div class="thumbnail">
+                    <a href="{% url "blog.views.detail" post.pk %}">
+                        <img src="http://lorempixel.com/400/400/{{ lorempixel_categories|random }}/" class="img-rounded" />
+                        <div class="caption">
+                            <h5>{{ post.title }}</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

@@ -1,7 +1,19 @@
 {% extends "blog/layout.html" %}
 
 {% block content %}
-    <h3>{{ post.title }}</h3>
-
-    {{ post.content }}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    {{ post.title }}
+                </div>
+                <div class="panel-body">
+                    {{ post.content|linebreaks }}
+                </div>
+            </div>
+            <a href="{% url "blog.views.index" %}" class="btn btn-default">List</a>
+        </div>
+    </div>
+</div>
 {% endblock %}
