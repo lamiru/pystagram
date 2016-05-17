@@ -1,6 +1,7 @@
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from blog.models import Post
+from blog.forms import PostForm
 
 def index(request):
     count = request.session.get('index_page_count', 0) + 1
@@ -29,4 +30,30 @@ def detail(request, pk=None, uuid=None):
 
     return render(request, 'blog/detail.html', {
         'post': post,
+    })
+
+def new(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save()
+            return redirect('blog.views.detail', post.pk)
+    else:
+        form = PostForm()
+    return render(request, 'blog/form.html', {
+        'form': form,
+    })
+
+def edit(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save()
+            return redirect('blog.views.detail', post.pk)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'blog/form.html', {
+        'form': form,
     })
