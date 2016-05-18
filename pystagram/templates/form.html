@@ -1,11 +1,11 @@
-{% extends "blog/layout.html" %}
+{% extends "layout.html" %}
 {% load bootstrap3 %}
 
 {% block content %}
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <form action="" method="POST">
+            <form action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% bootstrap_form form %}
                 {% buttons %}

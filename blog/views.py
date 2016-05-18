@@ -40,7 +40,7 @@ def new(request):
             return redirect('blog.views.detail', post.pk)
     else:
         form = PostForm()
-    return render(request, 'blog/form.html', {
+    return render(request, 'form.html', {
         'form': form,
     })
 
@@ -54,6 +54,6 @@ def edit(request, pk):
             return redirect('blog.views.detail', post.pk)
     else:
         form = PostForm(instance=post)
-    return render(request, 'blog/form.html', {
+    return render(request, 'form.html', {
         'form': form,
     })
