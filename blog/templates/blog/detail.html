@@ -17,6 +17,7 @@
                 <li>
                     {{ comment.content }}
                     <a href="{% url "blog.views.comment_edit" post.pk comment.pk %}">Edit</a>
+                    <a href="{% url "blog.views.comment_delete" post.pk comment.pk %}">Delete</a>
                 </li>
             {% endfor %}
             </ul>

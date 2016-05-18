@@ -100,3 +100,14 @@ def comment_edit(request, post_pk, pk):
     return render(request, 'form.html', {
         'form': form,
     })
+
+@login_required
+def comment_delete(request, post_pk, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if request.method == 'POST':
+        comment.delete()
+        messages.success(request, 'Deleted the comment.')
+        return redirect('blog.views.detail', post_pk)
+    return render(request, 'blog/comment_delete_confirm.html', {
+        'comment': comment,
+    })
