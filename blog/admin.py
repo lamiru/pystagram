@@ -5,7 +5,7 @@ admin.site.register(Comment)
 admin.site.register(Tag)
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('id', 'uuid', 'category', 'title')
+    list_display = ('id', 'uuid', 'category', 'title', 'author')
     search_fields = ('title', 'content')
 
 admin.site.register(Post, PostAdmin)

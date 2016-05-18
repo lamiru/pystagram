@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from uuid import uuid4
 
@@ -8,6 +9,7 @@ class Category(models.Model):
         return self.name
 
 class Post(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL)
     uuid = models.UUIDField(default=uuid4, editable=False, db_index=True)
     category = models.ForeignKey(Category)
     title = models.CharField(max_length=100, db_index=True)

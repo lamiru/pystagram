@@ -5,7 +5,7 @@ from blog.models import Post
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ('category', 'title', 'content', 'tags', 'origin_url')
 
     def clean_title(self):
         title = self.cleaned_data.get('title').strip()

@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from blog.models import Post
@@ -32,11 +33,16 @@ def detail(request, pk=None, uuid=None):
         'post': post,
     })
 
+@login_required
 def new(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            post = form.save()
+            post = form.save(commit=False)
+            post.author = request.user
+            post.ip = request.META['REMOTE_ADDR']
+            post.save()
+            
             return redirect('blog.views.detail', post.pk)
     else:
         form = PostForm()
