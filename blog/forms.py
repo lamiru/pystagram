@@ -1,5 +1,5 @@
 from django import forms
-from blog.models import Post
+from blog.models import Post, Comment
 
 
 class PostForm(forms.ModelForm):
@@ -20,3 +20,8 @@ class PostForm(forms.ModelForm):
             msg = 'Input more than 10 letters.'
             raise forms.ValidationError(msg)
         return content
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('content',)
