@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from blog.decorators import owner_required
 from blog.models import Post, Comment
 from blog.forms import PostForm, CommentForm
 
@@ -52,6 +53,7 @@ def new(request):
     })
 
 @login_required
+@owner_required(Post, 'pk')
 def edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
 
@@ -84,6 +86,7 @@ def comment_new(request, pk):
     })
 
 @login_required
+@owner_required(Comment, 'pk')
 def comment_edit(request, post_pk, pk):
     comment = get_object_or_404(Comment, pk=pk)
 
@@ -102,6 +105,7 @@ def comment_edit(request, post_pk, pk):
     })
 
 @login_required
+@owner_required(Comment, 'pk')
 def comment_delete(request, post_pk, pk):
     comment = get_object_or_404(Comment, pk=pk)
     if request.method == 'POST':
