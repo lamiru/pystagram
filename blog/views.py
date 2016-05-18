@@ -66,11 +66,13 @@ def edit(request, pk):
         'form': form,
     })
 
+@login_required
 def comment_new(request, pk):
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
+            comment.author = request.user
             comment.post = get_object_or_404(Post, pk=pk)
             comment.save()
             messages.success(request, 'Saved the comment.')
@@ -81,6 +83,7 @@ def comment_new(request, pk):
         'form': form,
     })
 
+@login_required
 def comment_edit(request, post_pk, pk):
     comment = get_object_or_404(Comment, pk=pk)
 

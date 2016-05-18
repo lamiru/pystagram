@@ -25,6 +25,7 @@ class Post(models.Model):
         return self.title
 
 class Comment(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL)
     post = models.ForeignKey(Post)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
