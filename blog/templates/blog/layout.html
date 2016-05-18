@@ -35,12 +35,18 @@ img {
         </div>
         <div id="navbar-top" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a><span class="label label-info">{{ user }}</span></a></li>
                 <li><a><span class="label label-info">Posts: {{ post_count }}</span></a></li>
                 {% block navbar_left %}
                 {% endblock %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                {% if not user.is_authenticated %}
+                    <li><a><span class="label label-info">Sign in</span></a></li>
+                    <li><a><span class="label label-info">Sign up</span></a></li>
+                {% else %}
+                    <li><a><span class="label label-info">{{ user }}</span></a></li>
+                    <li><a><span class="label label-info">Logout</span></a></li>
+                {% endif %}
                 {% block navbar_right %}
                 {% endblock %}
             </ul>
