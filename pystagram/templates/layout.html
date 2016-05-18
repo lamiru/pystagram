@@ -58,6 +58,20 @@ img {
     </div>
 </div>
 
+{% if messages %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
 {% block content %}
 {% endblock %}
 <div id="footer">

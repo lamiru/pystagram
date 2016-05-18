@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from accounts.forms import SignupForm
 
@@ -6,7 +7,7 @@ def signup(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             form.save()
-
+            messages.success(request, 'Successfully registered!')
             next_url = request.GET.get('next', 'blog.views.index')
             return redirect(next_url)
     else:
