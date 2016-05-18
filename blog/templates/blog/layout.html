@@ -35,6 +35,8 @@ img {
         </div>
         <div id="navbar-top" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+                <li><a><span class="label label-info">{{ user }}</span></a></li>
+                <li><a><span class="label label-info">Posts: {{ post_count }}</span></a></li>
                 {% block navbar_left %}
                 {% endblock %}
             </ul>
@@ -45,6 +47,7 @@ img {
         </div>
     </div>
 </div>
+
 {% block content %}
 {% endblock %}
 <div id="footer">
