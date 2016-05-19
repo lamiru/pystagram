@@ -45,7 +45,7 @@ def new(request):
             post.ip = request.META['REMOTE_ADDR']
             post.save()
 
-            return redirect('blog.views.detail', post.pk)
+            return redirect('blog:detail', post.pk)
     else:
         form = PostForm()
     return render(request, 'form.html', {
@@ -61,7 +61,7 @@ def edit(request, pk):
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             post = form.save()
-            return redirect('blog.views.detail', post.pk)
+            return redirect('blog:detail', post.pk)
     else:
         form = PostForm(instance=post)
     return render(request, 'form.html', {
@@ -78,7 +78,7 @@ def comment_new(request, pk):
             comment.post = get_object_or_404(Post, pk=pk)
             comment.save()
             messages.success(request, 'Saved the comment.')
-            return redirect('blog.views.detail', pk)
+            return redirect('blog:detail', pk)
     else:
         form = CommentForm()
     return render(request, 'form.html', {
@@ -97,7 +97,7 @@ def comment_edit(request, post_pk, pk):
             comment.post = get_object_or_404(Post, pk=pk)
             comment.save()
             messages.success(request, 'Edited the comment.')
-            return redirect('blog.views.detail', post_pk)
+            return redirect('blog:detail', post_pk)
     else:
         form = CommentForm(instance=comment)
     return render(request, 'form.html', {
@@ -111,7 +111,7 @@ def comment_delete(request, post_pk, pk):
     if request.method == 'POST':
         comment.delete()
         messages.success(request, 'Deleted the comment.')
-        return redirect('blog.views.detail', post_pk)
+        return redirect('blog:detail', post_pk)
     return render(request, 'blog/comment_delete_confirm.html', {
         'comment': comment,
     })

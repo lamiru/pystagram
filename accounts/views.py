@@ -10,7 +10,7 @@ def signup(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Successfully registered!')
-            next_url = request.GET.get('next', 'blog.views.index')
+            next_url = request.GET.get('next', 'blog:index')
             return redirect(next_url)
     else:
         form = SignupForm()

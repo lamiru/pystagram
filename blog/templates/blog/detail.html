@@ -16,15 +16,15 @@
             {% for comment in post.comment_set.all %}
                 <li>
                     {{ comment.content }}
-                    <a href="{% url "blog.views.comment_edit" post.pk comment.pk %}">Edit</a>
-                    <a href="{% url "blog.views.comment_delete" post.pk comment.pk %}">Delete</a>
+                    <a href="{% url 'blog:comment_edit' post.pk comment.pk %}">Edit</a>
+                    <a href="{% url 'blog:comment_delete' post.pk comment.pk %}">Delete</a>
                 </li>
             {% endfor %}
             </ul>
 
-            <a href="{% url "blog.views.index" %}" class="btn btn-default">List</a>
-            <a href="{% url "blog.views.edit" post.pk %}" class="btn btn-info">Edit</a>
-            <a href="{% url "blog.views.comment_new" post.pk %}" class="btn btn-success">New Comment</a>
+            <a href="{% url 'blog:index' %}" class="btn btn-default">List</a>
+            <a href="{% url 'blog:edit' post.pk %}" class="btn btn-info">Edit</a>
+            <a href="{% url 'blog:comment_new' post.pk %}" class="btn btn-success">New Comment</a>
         </div>
     </div>
 </div>

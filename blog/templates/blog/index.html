@@ -27,20 +27,24 @@
         {% for post in post_list %}
             <div class="col-xs-6 col-sm-4 col-md-3">
                 <div class="thumbnail">
-                    <a href="{% url "blog.views.detail" post.pk %}">
+                    <a href="{% url 'blog:detail' post.pk %}">
                         <img src="http://lorempixel.com/400/400/{{ lorempixel_categories|random }}/" class="img-rounded" />
                         <div class="caption">
                             <h5>{{ post.title }}</h5>
                         </div>
                     </a>
-                    <a href="{% url "blog.views.detail" post.uuid.hex %}">by uuid</a>
+                    <a href="{% url 'blog:detail' post.uuid.hex %}">
+                        <div class="caption">
+                            <h5>by uuid</h5>
+                        </div>
+                    </a>
                 </div>
             </div>
         {% endfor %}
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <a href="{% url "blog.views.new" %}" class="btn btn-default">New Post</a>
+            <a href="{% url 'blog:new' %}" class="btn btn-default">New Post</a>
         </div>
     </div>
 </div>
