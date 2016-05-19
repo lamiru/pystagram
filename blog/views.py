@@ -2,26 +2,26 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView
 from blog.decorators import owner_required
 from blog.models import Post, Comment
 from blog.forms import PostForm, CommentForm
 
-def index(request):
-    count = request.session.get('index_page_count', 0) + 1
-    request.session['index_page_count'] = count
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
 
-    post_list = Post.objects.all()
+    def get_context_data(self):
+        context = super(PostListView, self).get_context_data()
+        context['count'] = self.request.session.get('index_page_count', 0) + 1
+        self.request.session['index_page_count'] = context['count']
+        context['lorempixel_categories'] = (
+            'abstract', 'animals', 'business', 'cats', 'city', 'food', 'night',
+            'life', 'fashion', 'people', 'nature', 'sports', 'technics', 'transport',
+        )
+        return context
 
-    lorempixel_categories = (
-        'abstract', 'animals', 'business', 'cats', 'city', 'food', 'night',
-        'life', 'fashion', 'people', 'nature', 'sports', 'technics', 'transport',
-    )
-
-    return render(request, 'blog/index.html', {
-        'count': count,
-        'post_list': post_list,
-        'lorempixel_categories': lorempixel_categories,
-    })
+index = PostListView.as_view()
 
 def detail(request, pk=None, uuid=None):
     if pk:
