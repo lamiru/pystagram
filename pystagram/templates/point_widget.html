@@ -1,0 +1,34 @@
+<style>
+#map_canvas_{{ id }} img { max-width: none; }
+#map_canvas_{{ id }} label { width: auto; display: inline; }
+</style>
+<script type="text/javascript">
+$(function() {
+    var center = new google.maps.LatLng({{ base_lat }}, {{ base_lng }});
+    var google_map = null, marker = null;
+    var set_point = function(lat, lng) {
+        $('#{{ id }}').val(lng + "," + lat);
+    };
+    var options = {
+        zoom: 15,
+        center: center,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    google_map = new google.maps.Map($('#map_canvas_{{ id }}')[0], options);
+    marker = new google.maps.Marker({
+        position: center,
+        map: google_map,
+        draggable: true
+    });
+    $('#map_label_{{ id }}').html('Lat/Lng : ' + center.lat() + ',' + center.lng());
+    google.maps.event.addListener(marker, 'drag', function(e) {
+        var label = e.latLng.lat() + ','+ e.latLng.lng();
+        $('#map_label_{{ id }}').html('Lat/Lng : ' + label);
+    });
+    google.maps.event.addListener(marker, 'dragend', function(e) {
+        set_point(e.latLng.lat(), e.latLng.lng());
+    });
+});
+</script>
+<div id="map_canvas_{{ id }}" class="google_map" style="width: {{ width }}; height: {{ height }};"></div>
+<div id="map_label_{{ id }}" style="text-align: right;"></div>

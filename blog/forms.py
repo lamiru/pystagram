@@ -1,11 +1,14 @@
 from django import forms
 from blog.models import Post, Comment
-
+from pystagram.widgets import PointWidget
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('category', 'title', 'content', 'tags', 'origin_url')
+        fields = ('category', 'title', 'content', 'lnglat', 'tags', 'origin_url')
+        widgets = {
+            'lnglat': PointWidget,
+        }
 
     def clean_title(self):
         title = self.cleaned_data.get('title').strip()

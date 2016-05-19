@@ -10,6 +10,12 @@
                 </div>
                 <div class="panel-body">
                     {{ post.content|linebreaks }}
+                    {% if post.lnglat %}
+                        <hr/>
+                        <p class="text-center">
+                            <img src="https://maps.googleapis.com/maps/api/staticmap?center={{ post.lat}},{{ post.lng }}&zoom=13&size=600x300&maptype=roadmap&markers=color:red%7Clabel:C%7C{{ post.lat }},{{ post.lng }}" width="300" height="150" />
+                        </p>
+                    {% endif %}
                 </div>
             </div>
             <ul>

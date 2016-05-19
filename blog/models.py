@@ -15,6 +15,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category)
     title = models.CharField(max_length=100, db_index=True)
     content = models.TextField()
+    lnglat = models.CharField(max_length=100, blank=True, null=True)
     tags = models.ManyToManyField('Tag', blank=True)
     origin_url = models.URLField(blank=True)
     ip = models.GenericIPAddressField(blank=True, null=True)
@@ -27,6 +28,16 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:detail', args=[self.uuid.hex])
+
+    @property
+    def lat(self):
+        if self.lnglat:
+            return self.lnglat.split(',')[1]
+
+    @property
+    def lng(self):
+        if self.lnglat:
+            return self.lnglat.split(',')[0]
 
 class Comment(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
