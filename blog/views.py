@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView
 from blog.decorators import owner_required
@@ -45,9 +44,6 @@ class PostCreateView(CreateView):
         self.object.ip = self.request.META['REMOTE_ADDR']
         return super(PostCreateView, self).form_valid(form)
 
-    def get_success_url(self):
-        return reverse('blog:detail', args=[self.object.pk])
-
 new = login_required(PostCreateView.as_view())
 
 @login_required
@@ -59,7 +55,7 @@ def edit(request, pk):
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             post = form.save()
-            return redirect('blog:detail', post.pk)
+            return redirect(post)
     else:
         form = PostForm(instance=post)
     return render(request, 'form.html', {
@@ -76,7 +72,7 @@ def comment_new(request, pk):
             comment.post = get_object_or_404(Post, pk=pk)
             comment.save()
             messages.success(request, 'Saved the comment.')
-            return redirect('blog:detail', pk)
+            return redirect(comment.post)
     else:
         form = CommentForm()
     return render(request, 'form.html', {
@@ -95,7 +91,7 @@ def comment_edit(request, post_pk, pk):
             comment.post = get_object_or_404(Post, pk=pk)
             comment.save()
             messages.success(request, 'Edited the comment.')
-            return redirect('blog:detail', post_pk)
+            return redirect(comment.post)
     else:
         form = CommentForm(instance=comment)
     return render(request, 'form.html', {
@@ -109,7 +105,7 @@ def comment_delete(request, post_pk, pk):
     if request.method == 'POST':
         comment.delete()
         messages.success(request, 'Deleted the comment.')
-        return redirect('blog:detail', post_pk)
+        return redirect(comment.post)
     return render(request, 'blog/comment_delete_confirm.html', {
         'comment': comment,
     })

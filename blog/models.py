@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from uuid import uuid4
 
@@ -23,6 +24,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('blog:detail', args=[self.uuid.hex])
 
 class Comment(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
