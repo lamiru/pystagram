@@ -1,4 +1,4 @@
 *.pyc
 .packages
-pystagram/db.sqlite3
+pystagram/media
 db.sqlite3

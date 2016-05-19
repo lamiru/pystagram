@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from uuid import uuid4
+from pystagram.validators import jpeg_validator
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -15,6 +16,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category)
     title = models.CharField(max_length=100, db_index=True)
     content = models.TextField()
+    photo = models.ImageField(blank=True, null=True, validators=[jpeg_validator])
     lnglat = models.CharField(max_length=100, blank=True, null=True)
     tags = models.ManyToManyField('Tag', blank=True)
     origin_url = models.URLField(blank=True)

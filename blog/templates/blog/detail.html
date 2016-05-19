@@ -10,6 +10,11 @@
                 </div>
                 <div class="panel-body">
                     {{ post.content|linebreaks }}
+                    {% if post.photo %}
+                        <p class="text-center">
+                            <img src="{{ post.photo.url }}" />
+                        </p>
+                    {% endif %}
                     {% if post.lnglat %}
                         <hr/>
                         <p class="text-center">

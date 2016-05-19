@@ -5,7 +5,7 @@ from pystagram.widgets import PointWidget
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('category', 'title', 'content', 'lnglat', 'tags', 'origin_url')
+        fields = ('category', 'title', 'content', 'photo', 'lnglat', 'tags', 'origin_url')
         widgets = {
             'lnglat': PointWidget,
         }
