@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, resolve_url, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from blog.decorators import owner_required
@@ -59,22 +59,21 @@ class PostUpdateView(UpdateView):
 
 edit = PostUpdateView.as_view()
 
-@login_required
-def comment_new(request, pk):
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.post = get_object_or_404(Post, pk=pk)
-            comment.save()
-            messages.success(request, 'Saved the comment.')
-            return redirect(comment.post)
-    else:
-        form = CommentForm()
-    return render(request, 'form.html', {
-        'form': form,
-    })
+class CommentCreateView(CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'form.html'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.post = get_object_or_404(Post, pk=self.kwargs['pk'])
+        return super(CommentCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return resolve_url(self.object.post)
+
+comment_new = login_required(CommentCreateView.as_view())
 
 @login_required
 @owner_required(Comment, 'pk')
