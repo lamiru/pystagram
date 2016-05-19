@@ -75,24 +75,20 @@ class CommentCreateView(CreateView):
 
 comment_new = login_required(CommentCreateView.as_view())
 
-@login_required
-@owner_required(Comment, 'pk')
-def comment_edit(request, post_pk, pk):
-    comment = get_object_or_404(Comment, pk=pk)
+class CommentUpdateView(UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'form.html'
 
-    if request.method == 'POST':
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = get_object_or_404(Post, pk=pk)
-            comment.save()
-            messages.success(request, 'Edited the comment.')
-            return redirect(comment.post)
-    else:
-        form = CommentForm(instance=comment)
-    return render(request, 'form.html', {
-        'form': form,
-    })
+    @method_decorator(login_required)
+    @method_decorator(owner_required(Comment, 'pk'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(self.__class__, self).dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return resolve_url(self.object.post)
+
+comment_edit = CommentUpdateView.as_view()
 
 @login_required
 @owner_required(Comment, 'pk')
