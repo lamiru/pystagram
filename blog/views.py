@@ -1,8 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from blog.decorators import owner_required
 from blog.models import Post, Comment
 from blog.forms import PostForm, CommentForm
@@ -23,17 +22,16 @@ class PostListView(ListView):
 
 index = PostListView.as_view()
 
-def detail(request, pk=None, uuid=None):
-    if pk:
-        post = get_object_or_404(Post, pk=pk)
-    elif uuid:
-        post = get_object_or_404(Post, uuid=uuid)
-    else:
-        raise Http404
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/detail.html'
 
-    return render(request, 'blog/detail.html', {
-        'post': post,
-    })
+    def get_object(self, *args, **kwargs):
+        if 'uuid' in self.kwargs:
+            return get_object_or_404(Post, uuid=self.kwargs['uuid'])
+        return super(PostDetailView, self).get_object(*args, **kwargs)
+
+detail = PostDetailView.as_view()
 
 @login_required
 def new(request):
