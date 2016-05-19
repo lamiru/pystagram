@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView, CreateView
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from blog.decorators import owner_required
 from blog.models import Post, Comment
 from blog.forms import PostForm, CommentForm
@@ -46,21 +47,17 @@ class PostCreateView(CreateView):
 
 new = login_required(PostCreateView.as_view())
 
-@login_required
-@owner_required(Post, 'pk')
-def edit(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+class PostUpdateView(UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'form.html'
 
-    if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save()
-            return redirect(post)
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'form.html', {
-        'form': form,
-    })
+    @method_decorator(login_required)
+    @method_decorator(owner_required(Post, 'pk'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(self.__class__, self).dispatch(request, *args, **kwargs)
+
+edit = PostUpdateView.as_view()
 
 @login_required
 def comment_new(request, pk):
