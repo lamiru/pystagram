@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, resolve_url, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from blog.decorators import owner_required
 from blog.models import Post, Comment
 from blog.forms import PostForm, CommentForm
@@ -90,14 +90,16 @@ class CommentUpdateView(UpdateView):
 
 comment_edit = CommentUpdateView.as_view()
 
-@login_required
-@owner_required(Comment, 'pk')
-def comment_delete(request, post_pk, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    if request.method == 'POST':
-        comment.delete()
-        messages.success(request, 'Deleted the comment.')
-        return redirect(comment.post)
-    return render(request, 'blog/comment_delete_confirm.html', {
-        'comment': comment,
-    })
+class CommentDeleteView(DeleteView):
+    model = Comment
+    template_name = 'blog/comment_delete_confirm.html'
+
+    @method_decorator(login_required)
+    @method_decorator(owner_required(Comment, 'pk'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(self.__class__, self).dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return resolve_url(self.object.post)
+
+comment_delete = CommentDeleteView.as_view()
