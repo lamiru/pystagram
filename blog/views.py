@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from blog.decorators import owner_required
 from blog.models import Post, Comment
 from blog.forms import PostForm, CommentForm
@@ -33,22 +34,21 @@ class PostDetailView(DetailView):
 
 detail = PostDetailView.as_view()
 
-@login_required
-def new(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.ip = request.META['REMOTE_ADDR']
-            post.save()
+class PostCreateView(CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'form.html'
 
-            return redirect('blog:detail', post.pk)
-    else:
-        form = PostForm()
-    return render(request, 'form.html', {
-        'form': form,
-    })
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.ip = self.request.META['REMOTE_ADDR']
+        return super(PostCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('blog:detail', args=[self.object.pk])
+
+new = login_required(PostCreateView.as_view())
 
 @login_required
 @owner_required(Post, 'pk')
