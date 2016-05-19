@@ -10,6 +10,7 @@ from blog.forms import PostForm, CommentForm
 class PostListView(ListView):
     model = Post
     template_name = 'blog/index.html'
+    paginate_by = 8
 
     def get_context_data(self):
         context = super(PostListView, self).get_context_data()

@@ -1,4 +1,5 @@
 {% extends "blog/layout.html" %}
+{% load bootstrap3 %}
 
 {% block extra_head %}
 <!-- http://tobyyun.tumblr.com/post/55858430437/css%EB%A5%BC-%ED%86%B5%ED%95%9C-%EB%A9%80%ED%8B%B0%EB%9D%BC%EC%9D%B8-%EB%A7%90%EC%A4%84%EC%9E%84-%EC%B2%98%EB%A6%AC%EC%99%80-%ED%8F%B4%EB%B0%B1 -->
@@ -46,6 +47,9 @@
         <div class="col-xs-12">
             <a href="{% url 'blog:new' %}" class="btn btn-default">New Post</a>
         </div>
+    </div>
+    <div class="row text-center">
+        {% bootstrap_pagination page_obj %}
     </div>
 </div>
 {% endblock %}
