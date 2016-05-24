@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models.signals import pre_save
 from uuid import uuid4
 from pystagram.validators import jpeg_validator
+from pystagram.image import receiver_with_image_field
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -40,6 +42,9 @@ class Post(models.Model):
     def lng(self):
         if self.lnglat:
             return self.lnglat.split(',')[0]
+
+receiver = receiver_with_image_field('photo', 1024)
+pre_save.connect(receiver, sender=Post)
 
 class Comment(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL)

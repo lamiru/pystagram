@@ -14,16 +14,6 @@ class PostListView(ListView):
     template_name = 'blog/index.html'
     paginate_by = 8
 
-    def get_context_data(self):
-        context = super(PostListView, self).get_context_data()
-        context['count'] = self.request.session.get('index_page_count', 0) + 1
-        self.request.session['index_page_count'] = context['count']
-        context['lorempixel_categories'] = (
-            'abstract', 'animals', 'business', 'cats', 'city', 'food', 'night',
-            'life', 'fashion', 'people', 'nature', 'sports', 'technics', 'transport',
-        )
-        return context
-
 index = PostListView.as_view()
 
 class PostDetailView(DetailView):

@@ -1,3 +1,4 @@
 Django==1.8.2
 django-bootstrap3==5.4.0
 Pillow==3.2.0
+sorl-thumbnail==12.2

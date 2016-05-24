@@ -1,5 +1,5 @@
 {% extends "blog/layout.html" %}
-{% load bootstrap3 %}
+{% load bootstrap3 thumbnail %}
 
 {% block navbar_left %}
     <li><a><span class="label label-info">{{ count }}</span></a></li>
@@ -18,9 +18,11 @@
                 <div class="thumbnail">
                     <a href="{% url "blog:detail" post.pk %}">
                         {% if not post.photo %}
-                            <img src="http://lorempixel.com/400/400/sports/" class="img-rounded" />
+                            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="400" height="400" class="img-rounded" />
                         {% else %}
-                            <img src="{{ post.photo.url }}" class="img-rounded" />
+                            {% thumbnail post.photo "400x400" crop="center" as im %}
+                                <img src="{{ im.url }}" width="400" height="400" class="img-rounded" />
+                            {% endthumbnail %}
                         {% endif %}
                         <div class="caption">
                             <h5>{{ post.title }}</h5>
