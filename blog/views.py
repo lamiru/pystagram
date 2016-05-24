@@ -1,11 +1,13 @@
-from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, resolve_url, redirect, get_object_or_404
+from django.shortcuts import render, resolve_url, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from blog.decorators import owner_required
 from blog.models import Post, Comment
 from blog.forms import PostForm, CommentForm
+
+User = get_user_model()
 
 class PostListView(ListView):
     model = Post
@@ -104,3 +106,11 @@ class CommentDeleteView(DeleteView):
         return resolve_url(self.object.post)
 
 comment_delete = CommentDeleteView.as_view()
+
+def author_wall(request, username):
+    author = get_object_or_404(User, username=username)
+    post_list = Post.objects.filter(author=author)
+    return render(request, 'blog/author_wall.html', {
+        'author': author,
+        'post_list': post_list,
+    })

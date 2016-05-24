@@ -18,6 +18,17 @@ img {
     padding: 30px 20px;
     margin-top: 60px;
 }
+.thumbnail .caption h5 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-wrap: break-wrap;
+}
+.thumbnail .caption {
+    height: 50px;
+}
 </style>
 <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
 <script src="//maps.googleapis.com/maps/api/js"></script>

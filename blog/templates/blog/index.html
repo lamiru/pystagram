@@ -1,23 +1,6 @@
 {% extends "blog/layout.html" %}
 {% load bootstrap3 %}
 
-{% block extra_head %}
-<!-- http://tobyyun.tumblr.com/post/55858430437/css%EB%A5%BC-%ED%86%B5%ED%95%9C-%EB%A9%80%ED%8B%B0%EB%9D%BC%EC%9D%B8-%EB%A7%90%EC%A4%84%EC%9E%84-%EC%B2%98%EB%A6%AC%EC%99%80-%ED%8F%B4%EB%B0%B1 -->
-<style>
-.thumbnail .caption h5 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    word-wrap: break-wrap;
-}
-.thumbnail .caption {
-    height: 50px;
-}
-</style>
-{% endblock %}
-
 {% block navbar_left %}
     <li><a><span class="label label-info">Visit Count: {{ count }}</span></a></li>
 {% endblock %}
@@ -34,11 +17,7 @@
                             <h5>{{ post.title }}</h5>
                         </div>
                     </a>
-                    <a href="{% url 'blog:detail' post.uuid.hex %}">
-                        <div class="caption">
-                            <h5>by uuid</h5>
-                        </div>
-                    </a>
+                    <a href="{% url "blog:author_wall" post.author.username %}">by {{ post.author }}</a>
                 </div>
             </div>
         {% endfor %}
