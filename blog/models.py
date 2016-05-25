@@ -5,6 +5,8 @@ from django.db.models.signals import pre_save
 from uuid import uuid4
 from pystagram.validators import jpeg_validator
 from pystagram.image import receiver_with_image_field
+from pystagram.file import random_name_with_file_field
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -18,7 +20,8 @@ class Post(models.Model):
     category = models.ForeignKey(Category)
     title = models.CharField(max_length=100, db_index=True)
     content = models.TextField()
-    photo = models.ImageField(blank=True, null=True, validators=[jpeg_validator])
+    photo = models.ImageField(blank=True, null=True, validators=[jpeg_validator],
+                              upload_to=random_name_with_file_field)
     lnglat = models.CharField(max_length=100, blank=True, null=True)
     tags = models.ManyToManyField('Tag', blank=True)
     origin_url = models.URLField(blank=True)
