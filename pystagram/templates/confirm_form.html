@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <form action="" method="POST">
+                {% if form_legend %}
+                    <legend>{{ form_legend }}</legend>
+                {% endif %}
+
+                {% if form_desc %}
+                    <div class="alert alert-info">
+                        {{ form_desc }}
+                    </div>
+                {% endif %}
+
+                {% csrf_token %}
+
+                <button class="btn btn-primary">
+                    {{ submit_label|default:"Submit" }}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

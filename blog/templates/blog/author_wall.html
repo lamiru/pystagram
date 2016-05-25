@@ -8,8 +8,21 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-xs-12">
-            <h1>{{ author }}</h1>
+      <div class="col-xs-10">
+            <h1>
+                {{ author }}
+                {% if user != author %}
+                    {% if is_follow %}
+                        <a href="{% url "user_unfollow" author.username %}?next={{ request.path }}" title="Unfollow">
+                            <small class="glyphicon glyphicon-ok text-success"></small>
+                        </a>
+                    {% else %}
+                        <a href="{% url "user_follow" author.username %}?next={{ request.path }}" title="Follow">
+                            <small class="glyphicon glyphicon-plus text-muted"></small>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </h1>
         </div>
     </div>
     <div class="row">

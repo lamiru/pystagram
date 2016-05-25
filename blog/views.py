@@ -14,7 +14,10 @@ class PostListView(ListView):
     template_name = 'blog/index.html'
     paginate_by = 8
 
-index = PostListView.as_view()
+    def get_queryset(self):
+        return Post.timeline(self.request.user)
+
+index = login_required(PostListView.as_view())
 
 class PostDetailView(DetailView):
     model = Post
@@ -99,8 +102,10 @@ comment_delete = CommentDeleteView.as_view()
 
 def author_wall(request, username):
     author = get_object_or_404(User, username=username)
+    is_follow = request.user.is_follow(author)
     post_list = Post.objects.filter(author=author)
     return render(request, 'blog/author_wall.html', {
         'author': author,
+        'is_follow': is_follow,
         'post_list': post_list,
     })

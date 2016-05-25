@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import pre_save
 from uuid import uuid4
 from pystagram.validators import jpeg_validator
@@ -45,6 +46,11 @@ class Post(models.Model):
     def lng(self):
         if self.lnglat:
             return self.lnglat.split(',')[0]
+
+    @classmethod
+    def timeline(cls, from_user):
+        following_users = [follow.to_user_id for follow in from_user.following_set.all()]
+        return cls.objects.filter(Q(author=from_user) | Q(author__in=following_users))
 
 receiver = receiver_with_image_field('photo', 1024)
 pre_save.connect(receiver, sender=Post)
